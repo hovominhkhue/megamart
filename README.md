@@ -30,3 +30,14 @@ Conception DB: https://dbdiagram.io/d/DB_megamart-68c81d44ce69eed1118c6f04
 6.Tester avec des seeds, corriger si besoin.
 
 Étape C — Seed de démo (catégories + produits)
+- Créer les modèles
+- faire la démo de seed (les données simples)
+
+Étape D — Routes + Contrôleurs
+- 3 contrôlleurs principales et 1 controlleur optionnel: 
+Obligatoires :
+ProductController → liste & détail produits
+CartController → panier (voir/ajouter/modifier/supprimer)
+CheckoutController → checkout (affichage + traitement)
+Optionnel (recommandé) : OrderController → historique & détail des commandes (après checkout)
+
