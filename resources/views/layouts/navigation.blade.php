@@ -31,6 +31,13 @@
                             @endif
                         </span>
                     </x-nav-link>
+
+                    <!-- Mes commandes (desktop) -->
+                    @auth
+                        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                            {{ __('Mes commandes') }}
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
@@ -51,6 +58,11 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <!-- Mes commandes (dropdown) -->
+                            <x-dropdown-link :href="route('orders.index')">
+                                {{ __('Mes commandes') }}
+                            </x-dropdown-link>
+
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
@@ -113,6 +125,13 @@
                     @endif
                 </span>
             </x-responsive-nav-link>
+
+            <!-- Mes commandes (mobile) -->
+            @auth
+                <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                    {{ __('Mes commandes') }}
+                </x-responsive-nav-link>
+            @endauth
         </div>
 
         <!-- Responsive Settings -->
