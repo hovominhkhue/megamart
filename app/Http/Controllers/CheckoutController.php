@@ -56,7 +56,7 @@ class CheckoutController extends Controller
 
             $cart->update(['status' => 'ordered']);
 
-            return redirect()->route('home')->with('status', 'Commande confirmée ✅');
+            return redirect()->route('orders.show', $order)  ->with('status','Commande confirmée!');
         });
     }
 }

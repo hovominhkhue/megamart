@@ -10,10 +10,18 @@ class CartController extends Controller
 {
     protected function currentCart(): \App\Models\Cart {
         $sid = session()->getId();
-        $cart = Cart::firstOrCreate(['session_id' => $sid], [
-            'user_id' => auth()->id(),
-            'status'  => 'draft',
-        ]);
+
+        $cart = Cart::where('session_id', $sid)
+            ->where('status', 'draft')
+            ->first();
+
+        if (!$cart) {
+            $cart = Cart::create([
+                'session_id' => $sid,
+                'user_id'    => auth()->id(),
+                'status'     => 'draft',
+            ]);
+        }
 
         if (auth()->check() && !$cart->user_id) {
             $cart->user_id = auth()->id();
@@ -27,12 +35,10 @@ class CartController extends Controller
         return view('cart.show', compact('cart'));
     }
 
-    // Réservation du stock à l'ajout
     public function add(Product $product, Request $request)
     {
         $qty = max(1, (int) $request->input('qty', 1));
 
-        // Vérifier le stock disponible
         if ($product->stock < $qty) {
             return back()->withErrors(['stock' => "Stock insuffisant pour {$product->name}"]);
         }
@@ -49,14 +55,12 @@ class CartController extends Controller
             $item->unit_price_cents = $item->unit_price_cents ?: $product->price_cents;
             $item->save();
 
-            // Réserver le stock
             $product->decrement('stock', $qty);
         });
 
         return back()->with('status', 'Produit ajouté au panier.');
     }
 
-    // Mise à jour de quantité avec ajustement du stock réservé
     public function update(Request $request, Product $product)
     {
         $qty  = max(1, (int) $request->input('qty', 1));
@@ -68,7 +72,7 @@ class CartController extends Controller
 
         DB::transaction(function () use ($item, $product, $qty) {
             $old  = $item->qty;
-            $diff = $qty - $old; // >0 on réserve plus, <0 on libère
+            $diff = $qty - $old; 
 
             if ($diff > 0) {
                 if ($product->stock < $diff) {
@@ -89,7 +93,6 @@ class CartController extends Controller
         return back()->with('status', 'Quantité mise à jour.');
     }
 
-    // Retrait d’un article : on remet le stock
     public function remove(Product $product)
     {
         $cart = $this->currentCart();
@@ -100,7 +103,6 @@ class CartController extends Controller
 
         if ($item) {
             DB::transaction(function () use ($item, $product) {
-                // Rendre le stock réservé
                 $product->increment('stock', $item->qty);
                 $item->delete();
             });
