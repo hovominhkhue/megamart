@@ -11,8 +11,7 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    public function show(string $slug) {
-        $products = \App\Models\Product::where('slug', $slug)->firstOrFail();
-        return view('products.show', compact('products'));
+    public function show(\App\Models\Product $product) {
+        return view('products.show', compact('product'));
     }
 }
