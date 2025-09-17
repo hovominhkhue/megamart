@@ -19,7 +19,7 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 // Panier (visiteur ou connecté)
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{product:slug}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{product:slug}', [CartController::class, 'update'])->name('cart.update');
+Route::patch('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{product:slug}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Zone authentifiée : checkout + commandes + dashboard/profil

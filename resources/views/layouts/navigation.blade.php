@@ -15,8 +15,21 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Accueil') }}
                     </x-nav-link>
+
+                    <!-- Panier (desktop) avec badge -->
                     <x-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')">
-                        {{ __('Panier') }} ({{ $cartCount ?? 0 }})
+                        <span class="inline-flex items-center">
+                            <!-- Icône panier (optionnelle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 me-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M7 4h10l1 5H6l1-5Zm-1 7h12l-1.2 6H7.2L6 11Zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/>
+                            </svg>
+                            <span>{{ __('Panier') }}</span>
+                            @if(($cartCount ?? 0) > 0)
+                                <span class="ms-2 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 text-xs font-semibold rounded-full bg-blue-600 text-white dark:bg-blue-500">
+                                    {{ ($cartCount ?? 0) > 99 ? '99+' : ($cartCount ?? 0) }}
+                                </span>
+                            @endif
+                        </span>
                     </x-nav-link>
                 </div>
             </div>
@@ -82,8 +95,23 @@
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Accueil') }}
             </x-responsive-nav-link>
+
+            <!-- Panier (mobile) avec badge -->
             <x-responsive-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')">
-                {{ __('Panier') }} ({{ $cartCount ?? 0 }})
+                <span class="inline-flex items-center justify-between w-full">
+                    <span class="inline-flex items-center">
+                        <!-- Icône panier (optionnelle) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 me-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M7 4h10l1 5H6l1-5Zm-1 7h12l-1.2 6H7.2L6 11Zm2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/>
+                        </svg>
+                        <span>{{ __('Panier') }}</span>
+                    </span>
+                    @if(($cartCount ?? 0) > 0)
+                        <span class="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 text-xs font-semibold rounded-full bg-blue-600 text-white dark:bg-blue-500">
+                            {{ ($cartCount ?? 0) > 99 ? '99+' : ($cartCount ?? 0) }}
+                        </span>
+                    @endif
+                </span>
             </x-responsive-nav-link>
         </div>
 
