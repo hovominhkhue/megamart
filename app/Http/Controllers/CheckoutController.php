@@ -25,7 +25,12 @@ class CheckoutController extends Controller
             })
             ->firstOrFail();
 
-        return view('checkout.show', compact('cart'));
+        // ➜ ajoute ces 3 variables attendues par la vue
+        $total     = $cart->items->sum(fn($it) => $it->qty * $it->unit_price_cents); // en centimes
+        $currency  = env('STRIPE_CURRENCY', 'eur');
+        $stripeKey = config('services.stripe.key') ?? env('STRIPE_KEY');
+
+        return view('checkout.show', compact('cart', 'total', 'currency', 'stripeKey'));
     }
 
     /**
