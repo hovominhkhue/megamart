@@ -15,11 +15,12 @@ Route::get('/test-products', function() {
 // Détail produit (binding sur le slug)
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
+
 // Panier (visiteur ou connecté)
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-Route::post('/cart/add/{product:slug}', [CartController::class, 'add'])->name('cart.add');
-Route::patch('/cart/update/{product:slug}', [CartController::class, 'update'])->name('cart.update'); // <-- slug
-Route::delete('/cart/remove/{product:slug}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::match(['post','patch'], '/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Zone authentifiée : checkout + commandes + dashboard/profil
 Route::middleware(['auth', 'verified'])->group(function () {

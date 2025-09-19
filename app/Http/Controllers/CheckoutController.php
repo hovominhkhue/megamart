@@ -13,21 +13,19 @@ class CheckoutController extends Controller
     /**
      * Page récap + clé Stripe publique pour Elements
      */
-    public function show()
-    {
-        $cart = Cart::where('session_id', session()->getId())
+    public function show() {
+        $cart = \App\Models\Cart::query()
             ->where('status', 'draft')
             ->with('items.product')
+            ->where(function ($q) {
+                $q->where('session_id', session()->getId());
+                if (auth()->check()) {
+                    $q->orWhere('user_id', auth()->id());
+                }
+            })
             ->firstOrFail();
 
-        $total = $cart->items->sum(fn ($it) => $it->qty * $it->unit_price_cents);
-
-        return view('checkout.show', [
-            'cart'      => $cart,
-            'total'     => $total, // en cents
-            'stripeKey' => config('services.stripe.key') ?? env('STRIPE_KEY'),
-            'currency'  => env('STRIPE_CURRENCY', 'eur'),
-        ]);
+        return view('checkout.show', compact('cart'));
     }
 
     /**
