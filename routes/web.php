@@ -8,13 +8,15 @@ use App\Http\Controllers\{
 // Accueil = liste produits
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
+// Alias pratique pour les vues (Blade) : /products
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
 Route::get('/test-products', function() {
     return \App\Models\Product::all();
 });
 
 // Détail produit (binding sur le slug)
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('product.show');
-
 
 // Panier (visiteur ou connecté)
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
